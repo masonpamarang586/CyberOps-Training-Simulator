@@ -1,30 +1,57 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
-public class TerminalController : MonoBehaviour 
+public class TerminalController : MonoBehaviour
 {
     [SerializeField] private TMP_Text terminalOutput;
     [SerializeField] private TMP_InputField terminalInput;
+    [SerializeField] private ScrollRect terminalScroll;
 
-    private void Start() 
+    private CommandProcessor commandProcessor;
+
+    private void Start()
     {
+        commandProcessor = new CommandProcessor();
+        terminalOutput.text =
+            "CyberOps Linux Simulator\n\n" +
+            commandProcessor.GetPrompt();
+
         terminalInput.onSubmit.AddListener(HandleCommand);
+
         terminalInput.ActivateInputField();
     }
 
-    private void HandleCommand(string command) 
+    private IEnumerator ScrollToBottom()
     {
-        command = command.Trim();
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        terminalScroll.verticalNormalizedPosition = 0f;
+    }
+
+    private void HandleCommand(string input)
+    {
+        string command = input.Trim();
+
         if (string.IsNullOrEmpty(command))
         {
             RefocusInput();
             return;
         }
 
-        terminalOutput.text +=
-            $"\nuser@target:~$ {command}" +
-            $"\nYou entered: {command}";
+        terminalOutput.text += $"\n{commandProcessor.GetPrompt()} {command}";
+
+        string result = commandProcessor.Execute(command);
+
+        if (!string.IsNullOrEmpty(result))
+        {
+            terminalOutput.text += $"\n{result}";
+        }
+
         terminalInput.text = "";
+
+        StartCoroutine(ScrollToBottom());
         RefocusInput();
     }
 
