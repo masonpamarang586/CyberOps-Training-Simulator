@@ -65,4 +65,17 @@ public class TerminalController : MonoBehaviour
     {
         terminalInput.onSubmit.RemoveListener(HandleCommand);
     }
+
+    public void FocusInput()
+    {
+        StartCoroutine(FocusInputNextFrame());
+    }
+
+    private IEnumerator FocusInputNextFrame()
+    {
+        yield return null;
+
+        terminalInput.Select();
+        terminalInput.ActivateInputField();
+    }
 }
