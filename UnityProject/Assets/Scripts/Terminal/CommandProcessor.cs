@@ -32,7 +32,7 @@ public class CommandProcessor
                 return fileSystem.GetCurrentPath();
 
             case "ls":
-                return fileSystem.ListCurrentDirectory();
+                return ListDirectory(parts);
 
             case "cd":
                 return ChangeDirectory(parts);
@@ -66,6 +66,16 @@ public class CommandProcessor
         }
 
         return fileSystem.ChangeDirectory(parts[1]);
+    }
+
+    private string ListDirectory(string[] parts)
+    {
+        if (parts.Length < 2)
+        {
+            return fileSystem.ListDirectory();
+        }
+
+        return fileSystem.ListDirectory(parts[1]);
     }
 
     private string ReadFile(string[] parts)
