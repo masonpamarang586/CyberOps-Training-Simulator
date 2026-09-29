@@ -176,61 +176,172 @@ public class VirtualFileSystem
         return path;
     }
 
-    public string ListCurrentDirectory()
+    public string ListDirectory(string path = null)
     {
-        var directories = currentDirectory.Directories.Keys;
-        var files = currentDirectory.Files.Keys;
+        SimDirectory directory;
+
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            directory = currentDirectory;
+        }
+        else
+        {
+            string error = ResolveDirectory(path, out directory);
+
+            if (error != "")
+            {
+                return $"ls: {path}: {error}";
+            }
+        }
+
+        var directories = directory.Directories.Keys;
+        var files = directory.Files.Keys;
 
         return string.Join("    ", directories.Concat(files));
     }
 
-    public string ChangeDirectory(string directoryName)
+    public string ChangeDirectory(string path)
     {
-        if (directoryName == "/")
+        string error = ResolveDirectory(path, out SimDirectory directory);
+
+        if (error != "")
         {
-            currentDirectory = root;
-            return "";
+            return $"bash: cd: {path}: {error}";
         }
 
-        if (directoryName == "..")
-        {
-            if (currentDirectory.Parent != null)
-            {
-                currentDirectory = currentDirectory.Parent;
-            }
-
-            return "";
-        }
-
-        if (currentDirectory.Directories.TryGetValue(
-            directoryName,
-            out SimDirectory directory))
-        {
-            if (!CanEnter(directory))
-            {
-                return $"bash: cd: {directoryName}: Permission denied";
-            }
-
-            currentDirectory = directory;
-            return "";
-        }
-
-        return $"bash: cd: {directoryName}: No such file or directory";
+        currentDirectory = directory;
+        return "";
     }
 
-    public string ReadFile(string fileName)
+    public string ReadFile(string path)
     {
-        if (!currentDirectory.Files.TryGetValue(fileName, out SimFile file))
+        int lastSlash = path.LastIndexOf('/');
+
+        string directoryPath;
+        string fileName;
+
+        if (lastSlash == -1)
         {
-            return $"cat: {fileName}: No such file";
+            directoryPath = ".";
+            fileName = path;
+        }
+        else
+        {
+            directoryPath = path.Substring(0, lastSlash);
+
+            if (directoryPath == "")
+            {
+                directoryPath = "/";
+            }
+
+            fileName = path.Substring(lastSlash + 1);
+        }
+
+        string error = ResolveDirectory(
+            directoryPath,
+            out SimDirectory directory
+        );
+
+        if (error != "")
+        {
+            return $"cat: {path}: {error}";
+        }
+
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            return $"cat: {path}: No such file";
+        }
+
+        if (!directory.Files.TryGetValue(fileName, out SimFile file))
+        {
+            return $"cat: {path}: No such file";
         }
 
         if (!CanRead(file))
         {
-            return $"cat: {fileName}: Permission denied";
+            return $"cat: {path}: Permission denied";
         }
 
         return file.Content;
+    }
+
+    private string ResolveDirectory(
+    string path,
+    out SimDirectory resolvedDirectory
+)
+    {
+        resolvedDirectory = null;
+
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return "No such file or directory";
+        }
+
+        SimDirectory directory;
+
+        // Absolute path
+        if (path.StartsWith("/"))
+        {
+            directory = root;
+        }
+        // Home shortcut
+        else if (path == "~" || path.StartsWith("~/"))
+        {
+            directory = root.Directories["home"].Directories["user"];
+
+            if (path == "~")
+            {
+                resolvedDirectory = directory;
+                return "";
+            }
+
+            path = path.Substring(2);
+        }
+        // Relative path
+        else
+        {
+            directory = currentDirectory;
+        }
+
+        string[] parts = path.Split(
+            '/',
+            System.StringSplitOptions.RemoveEmptyEntries
+        );
+
+        foreach (string part in parts)
+        {
+            if (part == ".")
+            {
+                continue;
+            }
+
+            if (part == "..")
+            {
+                if (directory.Parent != null)
+                {
+                    directory = directory.Parent;
+                }
+
+                continue;
+            }
+
+            if (!directory.Directories.TryGetValue(
+                part,
+                out SimDirectory nextDirectory))
+            {
+                return "No such file or directory";
+            }
+
+            if (!CanEnter(nextDirectory))
+            {
+                return "Permission denied";
+            }
+
+            directory = nextDirectory;
+        }
+
+        resolvedDirectory = directory;
+        return "";
     }
 
     private bool CanRead(SimFile file)
