@@ -8,6 +8,7 @@ public class TerminalController : MonoBehaviour
     [SerializeField] private TMP_Text terminalOutput;
     [SerializeField] private TMP_InputField terminalInput;
     [SerializeField] private ScrollRect terminalScroll;
+    [SerializeField] private MissionManager missionManager;
 
     private CommandProcessor commandProcessor;
 
@@ -49,6 +50,14 @@ public class TerminalController : MonoBehaviour
             terminalOutput.text += $"\n{result}";
         }
 
+        if (missionManager != null)
+        {
+            missionManager.EvaluateObjectives(
+                commandProcessor,
+                this
+            );
+        }
+
         terminalInput.text = "";
 
         StartCoroutine(ScrollToBottom());
@@ -77,5 +86,15 @@ public class TerminalController : MonoBehaviour
 
         terminalInput.Select();
         terminalInput.ActivateInputField();
+    }
+
+    public void AppendSystemMessage(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            return;
+        }
+
+        terminalOutput.text += $"\n{message}";
     }
 }

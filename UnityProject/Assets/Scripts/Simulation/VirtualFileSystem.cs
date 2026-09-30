@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 public class VirtualFileSystem
 {
@@ -6,6 +7,7 @@ public class VirtualFileSystem
     private SimDirectory currentDirectory;
 
     private SimUser currentUser;
+    private HashSet<string> readFiles = new HashSet<string>();
 
     public VirtualFileSystem()
     {
@@ -262,7 +264,46 @@ public class VirtualFileSystem
             return $"cat: {path}: Permission denied";
         }
 
+        string directoryAbsolutePath = GetDirectoryPath(directory);
+
+        string absoluteFilePath;
+
+        if (directoryAbsolutePath == "/")
+        {
+            absoluteFilePath = "/" + fileName;
+        }
+        else
+        {
+            absoluteFilePath = directoryAbsolutePath + "/" + fileName;
+        }
+
+        readFiles.Add(absoluteFilePath);
+
         return file.Content;
+    }
+
+    public bool HasReadFile(string absolutePath)
+    {
+        return readFiles.Contains(absolutePath);
+    }
+
+    private string GetDirectoryPath(SimDirectory directory)
+    {
+        if (directory == root)
+        {
+            return "/";
+        }
+
+        string path = "";
+        SimDirectory current = directory;
+
+        while (current != null && current != root)
+        {
+            path = "/" + current.Name + path;
+            current = current.Parent;
+        }
+
+        return path;
     }
 
     private string ResolveDirectory(
