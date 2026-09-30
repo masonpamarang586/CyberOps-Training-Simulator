@@ -95,4 +95,14 @@ public class CommandProcessor
 
         return $"{username}@target:{path}$";
     }
+
+    public string GetCurrentPath()
+    {
+        return fileSystem.GetCurrentPath();
+    }
+
+    public bool HasReadFile(string path)
+    {
+        return fileSystem.HasReadFile(path);
+    }
 }
