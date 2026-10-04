@@ -15,8 +15,19 @@ public class TerminalController : MonoBehaviour
     private void Start()
     {
         commandProcessor = new CommandProcessor();
+
+        string startupText = "CyberOps Linux Simulator";
+
+        if (missionManager != null)
+        {
+            startupText +=
+                "\n\n" +
+                missionManager.GetMissionBriefing();
+        }
+
         terminalOutput.text =
-            "CyberOps Linux Simulator\n\n" +
+            startupText +
+            "\n\n" +
             commandProcessor.GetPrompt();
 
         terminalInput.onSubmit.AddListener(HandleCommand);

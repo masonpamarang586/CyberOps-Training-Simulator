@@ -118,7 +118,9 @@ public class VirtualFileSystem
         log.AddFile(
             new SimFile(
                 "auth.log",
-                "Sep 23 14:03 sshd: Accepted password for user"
+                "Sep 23 13:58 sshd: Failed password for user from 203.0.113.42 port 51820 ssh2\n" +
+                "Sep 23 14:01 sshd: Failed password for user from 203.0.113.42 port 51821 ssh2\n" +
+                "Sep 23 14:03 sshd: Accepted password for user from 203.0.113.42 port 51822 ssh2"
             )
         );
 

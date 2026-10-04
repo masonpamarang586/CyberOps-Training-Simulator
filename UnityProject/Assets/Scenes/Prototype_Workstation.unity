@@ -633,15 +633,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b85a75d92775014496e0f1346a4928b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissionManager
-  missionName: System Reonnassance
+  missionName: Suspicious SSH Login
+  briefing: A security alert indicates that this workstation may have experienced
+    unauthorized SSH access. Review the local account information and authentication
+    logs to determine whether a remote login succeeded.
   objectives:
-  - description: Navigate to /etc
-    type: 0
-    target: /etc
-    isComplete: 0
-  - description: Read /etc/passwd
+  - description: Review local user accounts
     type: 1
     target: /etc/passwd
+    isComplete: 0
+  - description: Inspect SSH authentication activity
+    type: 1
+    target: /var/log/auth.log
     isComplete: 0
 --- !u!4 &537157010
 Transform:
