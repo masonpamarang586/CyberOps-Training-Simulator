@@ -11,23 +11,12 @@ public class MissionManager : MonoBehaviour
     [SerializeField]
     private List<MissionObjective> objectives =
         new List<MissionObjective>();
-
+    [SerializeField] private ScoreManager scoreManager;
     private bool missionComplete;
-
-    [SerializeField] private int startingScore = 100;
-
-    private int currentScore;
-
-    public int CurrentScore => currentScore;
 
     public bool IsMissionComplete => missionComplete;
 
     public event Action OnMissionCompleted;
-
-    private void Awake()
-    {
-        currentScore = startingScore;
-    }
 
     public void EvaluateObjectives(
         CommandProcessor commandProcessor,
@@ -78,6 +67,7 @@ public class MissionManager : MonoBehaviour
 
         builder.AppendLine();
         builder.AppendLine("Type 'hint' for assistance.");
+        builder.AppendLine("Type 'score' to view your current score.");
 
         return builder.ToString().TrimEnd();
     }
@@ -124,40 +114,34 @@ public class MissionManager : MonoBehaviour
             return;
         }
 
-        int penalty = GetHintPenalty(tier);
+        int penalty = 0;
 
-        currentScore = Mathf.Max(
-            0,
-            currentScore - penalty
-        );
+        if (scoreManager != null)
+        {
+            penalty = scoreManager.ApplyHintPenalty(tier);
+        }
 
         terminalController.AppendSystemMessage(
             $"[HINT {tier}/3] {hint}"
         );
 
-        terminalController.AppendSystemMessage(
-            $"[HINT PENALTY] -{penalty} | Score: {currentScore}"
-        );
-    }
-
-    private int GetHintPenalty(int tier)
-    {
-        switch (tier)
+        if (scoreManager != null)
         {
-            case 1:
-                return 5;
-
-            case 2:
-                return 10;
-
-            case 3:
-                return 20;
-
-            default:
-                return 0;
+            terminalController.AppendSystemMessage(
+                $"[HINT PENALTY] -{penalty} | Score: {scoreManager.CurrentScore}"
+            );
         }
     }
 
+    public string GetScoreSummary()
+    {
+        if (scoreManager == null)
+        {
+            return "Score system unavailable.";
+        }
+
+        return scoreManager.GetScoreSummary();
+    }
     private bool AllObjectivesComplete()
     {
         if (objectives.Count == 0)
@@ -185,9 +169,12 @@ public class MissionManager : MonoBehaviour
             $"*** MISSION COMPLETE: {missionName} ***"
         );
 
-        terminalController.AppendSystemMessage(
-            $"Mission Score: {currentScore}/{startingScore}"
-        );
+        if (scoreManager != null)
+        {
+            terminalController.AppendSystemMessage(
+                scoreManager.GetScoreSummary()
+            );
+        }
 
         OnMissionCompleted?.Invoke();
     }

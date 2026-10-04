@@ -67,6 +67,29 @@ public class TerminalController : MonoBehaviour
             return;
         }
 
+        if (command.ToLower() == "score")
+        {
+            if (missionManager != null)
+            {
+                AppendSystemMessage(
+                    missionManager.GetScoreSummary()
+                );
+            }
+            else
+            {
+                AppendSystemMessage(
+                    "Score system unavailable."
+                );
+            }
+
+            terminalInput.text = "";
+
+            StartCoroutine(ScrollToBottom());
+            RefocusInput();
+
+            return;
+        }
+
         if (string.IsNullOrEmpty(command))
         {
             RefocusInput();
