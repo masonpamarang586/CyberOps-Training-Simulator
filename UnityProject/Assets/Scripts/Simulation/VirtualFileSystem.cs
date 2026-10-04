@@ -215,8 +215,14 @@ public class VirtualFileSystem
         return "";
     }
 
+
     public string ReadFile(string path)
     {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return "cat: missing operand";
+        }
+
         int lastSlash = path.LastIndexOf('/');
 
         string directoryPath;
@@ -280,30 +286,6 @@ public class VirtualFileSystem
         readFiles.Add(absoluteFilePath);
 
         return file.Content;
-    }
-
-    public bool HasReadFile(string absolutePath)
-    {
-        return readFiles.Contains(absolutePath);
-    }
-
-    private string GetDirectoryPath(SimDirectory directory)
-    {
-        if (directory == root)
-        {
-            return "/";
-        }
-
-        string path = "";
-        SimDirectory current = directory;
-
-        while (current != null && current != root)
-        {
-            path = "/" + current.Name + path;
-            current = current.Parent;
-        }
-
-        return path;
     }
 
     private string ResolveDirectory(
@@ -383,6 +365,29 @@ public class VirtualFileSystem
 
         resolvedDirectory = directory;
         return "";
+    }
+    public bool HasReadFile(string absolutePath)
+    {
+        return readFiles.Contains(absolutePath);
+    }
+
+    private string GetDirectoryPath(SimDirectory directory)
+    {
+        if (directory == root)
+        {
+            return "/";
+        }
+
+        string path = "";
+        SimDirectory current = directory;
+
+        while (current != null && current != root)
+        {
+            path = "/" + current.Name + path;
+            current = current.Parent;
+        }
+
+        return path;
     }
 
     private bool CanRead(SimFile file)
