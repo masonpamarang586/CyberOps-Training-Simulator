@@ -13,6 +13,19 @@ public class MissionObjective
     public string description;
     public MissionObjectiveType type;
     public string target;
+    [Header("Hints")]
+
+    [TextArea(2, 4)]
+    public string conceptualHint;
+
+    [TextArea(2, 4)]
+    public string guidedHint;
+
+    [TextArea(2, 4)]
+    public string directHint;
+
+    [HideInInspector]
+    public int hintsUsed;
 
     [HideInInspector]
     public bool isComplete;
@@ -46,5 +59,29 @@ public class MissionObjective
         }
 
         return false;
+    }
+
+    public string GetNextHint(out int tier)
+    {
+        tier = hintsUsed + 1;
+
+        switch (hintsUsed)
+        {
+            case 0:
+                hintsUsed++;
+                return conceptualHint;
+
+            case 1:
+                hintsUsed++;
+                return guidedHint;
+
+            case 2:
+                hintsUsed++;
+                return directHint;
+
+            default:
+                tier = 0;
+                return null;
+        }
     }
 }

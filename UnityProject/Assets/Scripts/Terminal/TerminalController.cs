@@ -46,6 +46,27 @@ public class TerminalController : MonoBehaviour
     {
         string command = input.Trim();
 
+        if (command.ToLower() == "hint")
+        {
+            if (missionManager != null)
+            {
+                missionManager.RequestHint(this);
+            }
+            else
+            {
+                AppendSystemMessage(
+                    "[HINT] No active mission."
+                );
+            }
+
+            terminalInput.text = "";
+
+            StartCoroutine(ScrollToBottom());
+            RefocusInput();
+
+            return;
+        }
+
         if (string.IsNullOrEmpty(command))
         {
             RefocusInput();

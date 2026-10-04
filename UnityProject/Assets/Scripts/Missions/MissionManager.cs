@@ -14,9 +14,20 @@ public class MissionManager : MonoBehaviour
 
     private bool missionComplete;
 
+    [SerializeField] private int startingScore = 100;
+
+    private int currentScore;
+
+    public int CurrentScore => currentScore;
+
     public bool IsMissionComplete => missionComplete;
 
     public event Action OnMissionCompleted;
+
+    private void Awake()
+    {
+        currentScore = startingScore;
+    }
 
     public void EvaluateObjectives(
         CommandProcessor commandProcessor,
@@ -65,7 +76,86 @@ public class MissionManager : MonoBehaviour
             builder.AppendLine($"- {objective.description}");
         }
 
+        builder.AppendLine();
+        builder.AppendLine("Type 'hint' for assistance.");
+
         return builder.ToString().TrimEnd();
+    }
+
+    public void RequestHint(TerminalController terminalController)
+    {
+        if (missionComplete)
+        {
+            terminalController.AppendSystemMessage(
+                "[HINT] Mission already complete."
+            );
+
+            return;
+        }
+
+        MissionObjective activeObjective = null;
+
+        foreach (MissionObjective objective in objectives)
+        {
+            if (!objective.isComplete)
+            {
+                activeObjective = objective;
+                break;
+            }
+        }
+
+        if (activeObjective == null)
+        {
+            terminalController.AppendSystemMessage(
+                "[HINT] No active objective."
+            );
+
+            return;
+        }
+
+        string hint = activeObjective.GetNextHint(out int tier);
+
+        if (hint == null)
+        {
+            terminalController.AppendSystemMessage(
+                "[HINT] No additional hints available for this objective."
+            );
+
+            return;
+        }
+
+        int penalty = GetHintPenalty(tier);
+
+        currentScore = Mathf.Max(
+            0,
+            currentScore - penalty
+        );
+
+        terminalController.AppendSystemMessage(
+            $"[HINT {tier}/3] {hint}"
+        );
+
+        terminalController.AppendSystemMessage(
+            $"[HINT PENALTY] -{penalty} | Score: {currentScore}"
+        );
+    }
+
+    private int GetHintPenalty(int tier)
+    {
+        switch (tier)
+        {
+            case 1:
+                return 5;
+
+            case 2:
+                return 10;
+
+            case 3:
+                return 20;
+
+            default:
+                return 0;
+        }
     }
 
     private bool AllObjectivesComplete()
@@ -93,6 +183,10 @@ public class MissionManager : MonoBehaviour
 
         terminalController.AppendSystemMessage(
             $"*** MISSION COMPLETE: {missionName} ***"
+        );
+
+        terminalController.AppendSystemMessage(
+            $"Mission Score: {currentScore}/{startingScore}"
         );
 
         OnMissionCompleted?.Invoke();
