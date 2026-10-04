@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 public class MissionManager : MonoBehaviour
 {
     [SerializeField] private string missionName;
+    [TextArea(3, 6)]
+    [SerializeField] private string briefing;
     [SerializeField]
     private List<MissionObjective> objectives =
         new List<MissionObjective>();
@@ -41,6 +44,28 @@ public class MissionManager : MonoBehaviour
         {
             CompleteMission(terminalController);
         }
+    }
+
+    public string GetMissionBriefing()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        builder.AppendLine($"=== MISSION: {missionName} ===");
+
+        if (!string.IsNullOrWhiteSpace(briefing))
+        {
+            builder.AppendLine(briefing);
+        }
+
+        builder.AppendLine();
+        builder.AppendLine("Objectives:");
+
+        foreach (MissionObjective objective in objectives)
+        {
+            builder.AppendLine($"- {objective.description}");
+        }
+
+        return builder.ToString().TrimEnd();
     }
 
     private bool AllObjectivesComplete()
