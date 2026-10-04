@@ -41,6 +41,8 @@ public class CommandProcessor
                 return ReadFile(parts);
             case "whoami":
                 return fileSystem.GetCurrentUsername();
+            case "sudo":
+                return Sudo(parts);
             default:
                 return $"bash: {command}: command not found";
         }
@@ -55,7 +57,10 @@ public class CommandProcessor
             "ls      List directory contents\n" +
             "cd      Change directory\n" +
             "cat     Display file contents\n" +
-            "whoami  Display current user";
+            "whoami  Display current user" +
+            "cat     Display file contents\n" +
+            "whoami  Display current user\n" +
+            "sudo    Execute or inspect elevated permissions";
     }
 
     private string ChangeDirectory(string[] parts)
@@ -88,12 +93,55 @@ public class CommandProcessor
         return fileSystem.ReadFile(parts[1]);
     }
 
+    private string Sudo(string[] parts)
+    {
+        if (parts.Length < 2)
+        {
+            return "sudo: a command is required";
+        }
+
+        if (parts[1] == "-l")
+        {
+            if (fileSystem.IsCurrentUserRoot())
+            {
+                return
+                    "User root may run the following commands on target:\n" +
+                    "    (ALL : ALL) ALL";
+            }
+
+            return
+                "User user may run the following commands on target:\n" +
+                "    (root) NOPASSWD: /usr/bin/backup-tool";
+        }
+
+        if (parts[1] == "/usr/bin/backup-tool")
+        {
+            if (fileSystem.IsCurrentUserRoot())
+            {
+                return "backup-tool: maintenance task completed.";
+            }
+
+            string result = fileSystem.EscalateToRoot();
+
+            return
+                "backup-tool: running maintenance task with elevated privileges...\n" +
+                result;
+        }
+
+        return
+            $"sudo: {fileSystem.GetCurrentUsername()} is not allowed to execute " +
+            $"'{parts[1]}' as root on target";
+    }
+
     public string GetPrompt()
     {
         string username = fileSystem.GetCurrentUsername();
         string path = fileSystem.GetPromptPath();
 
-        return $"{username}@target:{path}$";
+        string promptSymbol =
+            fileSystem.IsCurrentUserRoot() ? "#" : "$";
+
+        return $"{username}@target:{path}{promptSymbol}";
     }
 
     public string GetCurrentPath()

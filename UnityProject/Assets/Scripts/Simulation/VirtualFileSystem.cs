@@ -441,4 +441,24 @@ public class VirtualFileSystem
     {
         return currentUser.Username;
     }
+
+    public bool IsCurrentUserRoot()
+    {
+        return currentUser.IsRoot;
+    }
+
+    public string EscalateToRoot()
+    {
+        if (currentUser.IsRoot)
+        {
+            return "User is already root.";
+        }
+
+        currentUser = new SimUser(
+            "root",
+            true
+        );
+
+        return "Privilege escalation successful.";
+    }
 }
