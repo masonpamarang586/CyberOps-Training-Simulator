@@ -641,11 +641,21 @@ MonoBehaviour:
   - description: Review local user accounts
     type: 1
     target: /etc/passwd
+    conceptualHint: Linux systems store local account information in a standard configuration
+      file.
+    guidedHint: Look inside the /etc directory for the passwd file.
+    directHint: 'Run: cat /etc/passwd'
+    hintsUsed: 0
     isComplete: 0
   - description: Inspect SSH authentication activity
     type: 1
     target: /var/log/auth.log
+    conceptualHint: Authentication events are generally recorded in system log files.
+    guidedHint: Check the authentication log inside /var/log.
+    directHint: 'Run: cat /var/log/auth.log'
+    hintsUsed: 0
     isComplete: 0
+  startingScore: 100
 --- !u!4 &537157010
 Transform:
   m_ObjectHideFlags: 0
