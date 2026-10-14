@@ -655,6 +655,14 @@ MonoBehaviour:
     directHint: 'Run: cat /var/log/auth.log'
     hintsUsed: 0
     isComplete: 0
+  - description: Recover the user account password
+    type: 2
+    target: user
+    conceptualHint: Authentication events are generally recorded in system log files.
+    guidedHint: Check the authentication log inside /var/log.
+    directHint: 'Run: cat /var/log/auth.log'
+    hintsUsed: 0
+    isComplete: 0
   scoreManager: {fileID: 1653050651}
 --- !u!4 &537157010
 Transform:
