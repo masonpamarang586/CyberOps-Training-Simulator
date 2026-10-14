@@ -55,6 +55,7 @@ public class MissionObjective
             case MissionObjectiveType.BecomeRoot:
                 completed =
                     commandProcessor.IsCurrentUserRoot();
+                break;
             case MissionObjectiveType.RecoverPassword:
                 completed =
                     commandProcessor.HasRecoveredPassword(target);
