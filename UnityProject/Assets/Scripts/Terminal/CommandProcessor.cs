@@ -199,6 +199,10 @@ public class CommandProcessor
         return fileSystem.HasReadFile(path);
     }
 
+    public bool IsCurrentUserRoot()
+    {
+        return fileSystem.IsCurrentUserRoot();
+    }
     public bool HasRecoveredPassword(string username)
     {
         return passwordAttackSimulator.HasRecoveredPassword(username);
