@@ -4,7 +4,8 @@ using UnityEngine;
 public enum MissionObjectiveType
 {
     ReachPath,
-    ReadFile
+    ReadFile,
+    RecoverPassword
 }
 
 [Serializable]
@@ -49,6 +50,10 @@ public class MissionObjective
             case MissionObjectiveType.ReadFile:
                 completed =
                     commandProcessor.HasReadFile(target);
+                break;
+            case MissionObjectiveType.RecoverPassword:
+                completed =
+                    commandProcessor.HasRecoveredPassword(target);
                 break;
         }
 

@@ -3,10 +3,13 @@ using System;
 public class CommandProcessor
 {
     private readonly VirtualFileSystem fileSystem;
+    private readonly PasswordAttackSimulator passwordAttackSimulator;
 
     public CommandProcessor()
     {
         fileSystem = new VirtualFileSystem();
+        passwordAttackSimulator =
+            new PasswordAttackSimulator();
     }
 
     public string Execute(string input)
@@ -27,22 +30,20 @@ public class CommandProcessor
         {
             case "help":
                 return Help();
-
             case "pwd":
                 return fileSystem.GetCurrentPath();
-
             case "ls":
                 return ListDirectory(parts);
-
             case "cd":
                 return ChangeDirectory(parts);
-
             case "cat":
                 return ReadFile(parts);
             case "whoami":
                 return fileSystem.GetCurrentUsername();
             case "sudo":
                 return Sudo(parts);
+            case "crack":
+                return Crack(parts);
             default:
                 return $"bash: {command}: command not found";
         }
@@ -57,10 +58,10 @@ public class CommandProcessor
             "ls      List directory contents\n" +
             "cd      Change directory\n" +
             "cat     Display file contents\n" +
-            "whoami  Display current user" +
-            "cat     Display file contents\n" +
             "whoami  Display current user\n" +
-            "sudo    Execute or inspect elevated permissions";
+            "sudo    Execute or inspect elevated permissions\n" +
+            "crack   Run simulated password dictionary attack";
+
     }
 
     private string ChangeDirectory(string[] parts)
@@ -144,6 +145,50 @@ public class CommandProcessor
         return $"{username}@target:{path}{promptSymbol}";
     }
 
+    private string Crack(string[] parts)
+    {
+        if (parts.Length < 3)
+        {
+            return
+                "Usage: crack <username> <wordlist>";
+        }
+
+        string username = parts[1];
+        string wordlistPath = parts[2];
+
+        if (!fileSystem.HasReadFile("/etc/shadow"))
+        {
+            return
+                "crack: no credential hashes acquired. " +
+                "Inspect /etc/shadow first.";
+        }
+
+        string hash =
+            fileSystem.GetPasswordHashForUser(username);
+
+        if (string.IsNullOrWhiteSpace(hash))
+        {
+            return
+                $"crack: no hash found for user '{username}'";
+        }
+
+        string wordlistContent =
+            fileSystem.ReadFile(wordlistPath);
+
+        if (wordlistContent.StartsWith("cat:"))
+        {
+            return
+                $"crack: unable to load wordlist\n" +
+                wordlistContent;
+        }
+
+        return passwordAttackSimulator.RunDictionaryAttack(
+            username,
+            hash,
+            wordlistContent
+        );
+    }
+
     public string GetCurrentPath()
     {
         return fileSystem.GetCurrentPath();
@@ -152,5 +197,10 @@ public class CommandProcessor
     public bool HasReadFile(string path)
     {
         return fileSystem.HasReadFile(path);
+    }
+
+    public bool HasRecoveredPassword(string username)
+    {
+        return passwordAttackSimulator.HasRecoveredPassword(username);
     }
 }
