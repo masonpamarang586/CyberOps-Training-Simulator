@@ -153,4 +153,9 @@ public class CommandProcessor
     {
         return fileSystem.HasReadFile(path);
     }
+
+    public bool IsCurrentUserRoot()
+    {
+        return fileSystem.IsCurrentUserRoot();
+    }
 }
