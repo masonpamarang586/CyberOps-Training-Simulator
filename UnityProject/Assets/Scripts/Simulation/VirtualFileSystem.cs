@@ -43,10 +43,48 @@ public class VirtualFileSystem
             "root",
             PermissionLevel.Public
         );
+        SimDirectory usr = new SimDirectory(
+            "usr",
+            root,
+            "root",
+            PermissionLevel.Public
+        );
 
         root.AddDirectory(home);
         root.AddDirectory(etc);
         root.AddDirectory(var);
+        root.AddDirectory(usr);
+
+        SimDirectory share = new SimDirectory(
+            "share",
+            usr,
+            "root",
+            PermissionLevel.Public
+        );
+
+        usr.AddDirectory(share);
+
+        SimDirectory wordlists = new SimDirectory(
+            "wordlists",
+            share,
+            "root",
+            PermissionLevel.Public
+        );
+
+        share.AddDirectory(wordlists);
+
+        wordlists.AddFile(
+            new SimFile(
+                "common.txt",
+                "password\n" +
+                "welcome1\n" +
+                "admin123\n" +
+                "backup2026\n" +
+                "letmein",
+                "root",
+                PermissionLevel.Public
+            )
+        );
 
         // /home/user
         SimDirectory user = new SimDirectory(
@@ -100,7 +138,8 @@ public class VirtualFileSystem
         etc.AddFile(
             new SimFile(
                 "shadow",
-                "root:$6$examplehash\nuser:$6$anotherhash",
+                "root:$sim$ROOT01\n" +
+                "user:$sim$A91C4B7E",
                 "root",
                 PermissionLevel.Root
             )
@@ -373,6 +412,34 @@ public class VirtualFileSystem
         return readFiles.Contains(absolutePath);
     }
 
+    public string GetPasswordHashForUser(string username)
+    {
+        if (!HasReadFile("/etc/shadow"))
+        {
+            return null;
+        }
+
+        SimFile shadowFile =
+            root.Directories["etc"].Files["shadow"];
+
+        string[] lines = shadowFile.Content.Split(
+            '\n',
+            System.StringSplitOptions.RemoveEmptyEntries
+        );
+
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split(':', 2);
+
+            if (parts.Length == 2 &&
+                parts[0] == username)
+            {
+                return parts[1];
+            }
+        }
+
+        return null;
+    }
     private string GetDirectoryPath(SimDirectory directory)
     {
         if (directory == root)
