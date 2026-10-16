@@ -1,10 +1,16 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using static Readme;
 
 public class ScenarioMenuController : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
+
+    public bool IsMenuOpen => pausePanel.activeSelf;
+
+    public event Action MenuClosed;
 
     private void Start()
     {
@@ -14,8 +20,12 @@ public class ScenarioMenuController : MonoBehaviour
 
     public void OpenMenu()
     {
-        pausePanel.SetActive(true);
+        if (IsMenuOpen)
+        {
+            return;
+        }
 
+        pausePanel.SetActive(true);
         Time.timeScale = 0f;
 
         if (EventSystem.current != null)
@@ -26,8 +36,15 @@ public class ScenarioMenuController : MonoBehaviour
 
     public void ResumeGame()
     {
+        if (!IsMenuOpen)
+        {
+            return;
+        }
+
         pausePanel.SetActive(false);
         Time.timeScale = 1f;
+
+        MenuClosed?.Invoke();
     }
 
     public void RestartScenario()
