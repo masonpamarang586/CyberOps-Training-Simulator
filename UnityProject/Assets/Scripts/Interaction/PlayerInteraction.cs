@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Interaction
@@ -11,7 +9,7 @@ namespace Assets.Scripts.Interaction
         [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private ScenarioMenuController scenarioMenuController;
 
-        private LinuxMonitorInteractable focusedMonitor;
+        private MonitorInteractable focusedMonitor;
 
         private void Awake()
         {
@@ -40,7 +38,7 @@ namespace Assets.Scripts.Interaction
                 }
 
                 // Priority 2:
-                // If we're using the monitor, Escape exits it.
+                // If we're using any monitor, Escape exits it.
                 if (focusedMonitor != null)
                 {
                     focusedMonitor.ExitFocus();
@@ -64,7 +62,7 @@ namespace Assets.Scripts.Interaction
                 return;
             }
 
-            // While using the monitor, don't process E interactions.
+            // While using a monitor, don't process E interactions.
             if (focusedMonitor != null)
             {
                 return;
@@ -108,8 +106,8 @@ namespace Assets.Scripts.Interaction
 
             if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
             {
-                LinuxMonitorInteractable monitor =
-                    hit.collider.GetComponentInParent<LinuxMonitorInteractable>();
+                MonitorInteractable monitor =
+                    hit.collider.GetComponentInParent<MonitorInteractable>();
 
                 if (monitor != null)
                 {
