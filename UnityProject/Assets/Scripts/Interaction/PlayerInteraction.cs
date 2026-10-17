@@ -9,7 +9,7 @@ namespace Assets.Scripts.Interaction
         [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private ScenarioMenuController scenarioMenuController;
 
-        private MonitorInteractable focusedMonitor;
+        private DeskInteractable focusedInteractable;
 
         private void Awake()
         {
@@ -39,10 +39,10 @@ namespace Assets.Scripts.Interaction
 
                 // Priority 2:
                 // If we're using any monitor, Escape exits it.
-                if (focusedMonitor != null)
+                if (focusedInteractable != null)
                 {
-                    focusedMonitor.ExitFocus();
-                    focusedMonitor = null;
+                    focusedInteractable.ExitFocus();
+                    focusedInteractable = null;
                     return;
                 }
 
@@ -63,7 +63,7 @@ namespace Assets.Scripts.Interaction
             }
 
             // While using a monitor, don't process E interactions.
-            if (focusedMonitor != null)
+            if (focusedInteractable != null)
             {
                 return;
             }
@@ -78,7 +78,7 @@ namespace Assets.Scripts.Interaction
         {
             if (scenarioMenuController != null)
             {
-                scenarioMenuController.MenuClosed += RestoreMonitorFocus;
+                scenarioMenuController.MenuClosed += RestoreInteractableFocus;
             }
         }
 
@@ -86,15 +86,15 @@ namespace Assets.Scripts.Interaction
         {
             if (scenarioMenuController != null)
             {
-                scenarioMenuController.MenuClosed -= RestoreMonitorFocus;
+                scenarioMenuController.MenuClosed -= RestoreInteractableFocus;
             }
         }
 
-        private void RestoreMonitorFocus()
+        private void RestoreInteractableFocus()
         {
-            if (focusedMonitor != null)
+            if (focusedInteractable != null)
             {
-                focusedMonitor.EnterFocus();
+                focusedInteractable.EnterFocus();
             }
         }
 
@@ -106,13 +106,13 @@ namespace Assets.Scripts.Interaction
 
             if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
             {
-                MonitorInteractable monitor =
-                    hit.collider.GetComponentInParent<MonitorInteractable>();
+                DeskInteractable interactable =
+                    hit.collider.GetComponentInParent<DeskInteractable>();
 
-                if (monitor != null)
+                if (interactable != null)
                 {
-                    focusedMonitor = monitor;
-                    focusedMonitor.EnterFocus();
+                    focusedInteractable = interactable;
+                    focusedInteractable.EnterFocus();
                 }
             }
         }
