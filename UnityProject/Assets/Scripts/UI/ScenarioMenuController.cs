@@ -2,19 +2,34 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using static Readme;
 
 public class ScenarioMenuController : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject pauseMenuContent;
+    [SerializeField] private GameObject objectivesPanel;
 
     public bool IsMenuOpen => pausePanel.activeSelf;
+    public bool IsObjectivesOpen =>
+        objectivesPanel != null &&
+        objectivesPanel.activeSelf;
 
     public event Action MenuClosed;
 
     private void Start()
     {
         pausePanel.SetActive(false);
+
+        if (pauseMenuContent != null)
+        {
+            pauseMenuContent.SetActive(true);
+        }
+
+        if (objectivesPanel != null)
+        {
+            objectivesPanel.SetActive(false);
+        }
+
         Time.timeScale = 1f;
     }
 
@@ -26,6 +41,9 @@ public class ScenarioMenuController : MonoBehaviour
         }
 
         pausePanel.SetActive(true);
+        pauseMenuContent.SetActive(true);
+        objectivesPanel.SetActive(false);
+
         Time.timeScale = 0f;
 
         if (EventSystem.current != null)
@@ -45,6 +63,29 @@ public class ScenarioMenuController : MonoBehaviour
         Time.timeScale = 1f;
 
         MenuClosed?.Invoke();
+    }
+
+    public void ShowObjectives()
+    {
+        pauseMenuContent.SetActive(false);
+        objectivesPanel.SetActive(true);
+    }
+
+    public void ReturnToPauseMenu()
+    {
+        objectivesPanel.SetActive(false);
+        pauseMenuContent.SetActive(true);
+    }
+
+    public void HandleEscape()
+    {
+        if (IsObjectivesOpen)
+        {
+            ReturnToPauseMenu();
+            return;
+        }
+
+        ResumeGame();
     }
 
     public void RestartScenario()

@@ -33,7 +33,7 @@ namespace Assets.Scripts.Interaction
                 if (scenarioMenuController != null &&
                     scenarioMenuController.IsMenuOpen)
                 {
-                    scenarioMenuController.ResumeGame();
+                    scenarioMenuController.HandleEscape();
                     return;
                 }
 

@@ -202,7 +202,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2013726725}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1209,26 +1209,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b85a75d92775014496e0f1346a4928b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissionManager
-  missionName: Suspicious SSH Login
-  briefing: A security alert indicates that this workstation may have experienced
-    unauthorized SSH access. Review the local account information and authentication
-    logs to determine whether a remote login succeeded.
+  missionName: Public Exposure Reconnaissance
+  briefing: 'Northstar Technologies suspects that sensitive internal information
+
+    has
+    been unintentionally indexed by a public search engine.
+
+    
+
+    Use open-source
+    reconnaissance techniques to locate the exposed
+
+    material and determine
+    what information has been disclosed.'
   objectives:
-  - description: Review local user accounts
+  - description: Locate and inspect the exposed internal document
     type: 1
     target: /etc/passwd
     conceptualHint: Linux systems store local account information in a standard configuration
       file.
     guidedHint: Look inside the /etc directory for the passwd file.
     directHint: 'Run: cat /etc/passwd'
-    hintsUsed: 0
-    isComplete: 0
-  - description: Inspect SSH authentication activity
-    type: 1
-    target: /var/log/auth.log
-    conceptualHint: Authentication events are generally recorded in system log files.
-    guidedHint: Check the authentication log inside /var/log.
-    directHint: 'Run: cat /var/log/auth.log'
     hintsUsed: 0
     isComplete: 0
   scoreManager: {fileID: 1653050651}
@@ -1763,6 +1764,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 770856539}
   m_CullTransparentMesh: 1
+--- !u!1 &805639272 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8987971232483049075, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -3155,12 +3161,27 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 722760904578745187, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
   m_PrefabInstance: {fileID: 6916760819575306525}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 805639272}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88e6d461b53ca78438f5f14678df0ebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioMenuController
+--- !u!114 &1212417639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805639272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6efddc0a7dc9b1b40beafb5b282724d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioObjectivesController
+  missionManager: {fileID: 537157009}
+  missionTitleText: {fileID: 6916760819575306529}
+  objectivesText: {fileID: 6916760819575306528}
 --- !u!1 &1219651129
 GameObject:
   m_ObjectHideFlags: 0
@@ -4515,67 +4536,67 @@ MonoBehaviour:
 
     Restricts search results to a specific domain.
 
-    
+
 
     Example:
 
     site:northstar.test
 
-    
 
-    
+
+
 
     filetype:
 
     Searches
     for a specific file type.
 
-    
+
 
     Example:
 
     filetype:pdf
 
-    
 
-    
+
+
 
     intitle:
 
     Searches
     for pages containing a term in the page title.
 
-    
+
 
     Example:
 
     intitle:confidential
 
-    
 
-    
+
+
 
     inurl:
 
     Searches
     for pages containing a term in the URL.
 
-    
+
 
     Example:
 
     inurl:documents
 
-    
 
-    
+
+
 
     "exact
     phrase"
 
     Searches for an exact phrase.
 
-    
+
 
     Example:
 
@@ -5730,6 +5751,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 722760904578745187, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: objectivesPanel
+      value: 
+      objectReference: {fileID: 6916760819575306526}
+    - target: {fileID: 722760904578745187, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: pauseMenuContent
+      value: 
+      objectReference: {fileID: 6916760819575306527}
     - target: {fileID: 2398642650652581165, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -5810,6 +5839,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3550234393348919374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550234393348919374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550234393348919374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1212417637}
+    - target: {fileID: 3550234393348919374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550234393348919374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReturnToPauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550234393348919374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ScenarioMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550234393348919374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5430583645218301374, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
       propertyPath: m_UiScaleMode
       value: 1
@@ -5826,6 +5883,34 @@ PrefabInstance:
       propertyPath: m_ReferenceResolution.y
       value: 1440
       objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1212417637}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowObjectives
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ScenarioMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8037746908552460180, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
       propertyPath: m_SizeDelta.x
       value: 220
@@ -5841,8 +5926,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8987971232483049075, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1212417639}
   m_SourcePrefab: {fileID: 100100000, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+--- !u!1 &6916760819575306526 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6898208812127170193, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6916760819575306527 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6829012350381909206, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6916760819575306528 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2577340700873486134, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &6916760819575306529 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4883579769849611607, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

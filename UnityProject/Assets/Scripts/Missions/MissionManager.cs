@@ -142,6 +142,31 @@ public class MissionManager : MonoBehaviour
 
         return scoreManager.GetScoreSummary();
     }
+
+    public string GetMissionName()
+    {
+        return missionName;
+    }
+
+    public string GetObjectiveChecklist()
+    {
+        StringBuilder builder =
+            new StringBuilder();
+
+        foreach (MissionObjective objective in objectives)
+        {
+            string marker =
+                objective.isComplete
+                    ? "[X]"
+                    : "[ ]";
+
+            builder.AppendLine(
+                $"{marker} {objective.description}"
+            );
+        }
+
+        return builder.ToString().TrimEnd();
+    }
     private bool AllObjectivesComplete()
     {
         if (objectives.Count == 0)
