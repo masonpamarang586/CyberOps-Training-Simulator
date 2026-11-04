@@ -9,6 +9,8 @@ public class BrowserController : MonoBehaviour
     [SerializeField] private GameObject exposedDocumentButton;
     [SerializeField] private GameObject documentPanel;
     [SerializeField] private MissionManager missionManager;
+    [SerializeField] private GameObject missionCompletePanel;
+    [SerializeField] private TMP_Text missionCompleteText;
 
     private ReconSearchSimulator searchSimulator;
 
@@ -29,6 +31,13 @@ public class BrowserController : MonoBehaviour
         helpPanel.SetActive(false);
         exposedDocumentButton.SetActive(false);
         documentPanel.SetActive(false);
+
+        missionCompletePanel.SetActive(false);
+
+        if (missionManager != null)
+        {
+            missionManager.OnMissionCompleted += ShowMissionComplete;
+        }
     }
 
     public void Search()
@@ -92,11 +101,21 @@ public class BrowserController : MonoBehaviour
         searchInput.onSubmit.RemoveListener(
             HandleSearch
         );
+
+        if (missionManager != null)
+        {
+            missionManager.OnMissionCompleted -= ShowMissionComplete;
+        }
     }
 
     public void OpenExposedDocument()
     {
         documentPanel.SetActive(true);
+    }
+
+    public void CloseDocument()
+    {
+        documentPanel.SetActive(false);
 
         if (missionManager != null)
         {
@@ -106,8 +125,20 @@ public class BrowserController : MonoBehaviour
         }
     }
 
-    public void CloseDocument()
+    private void ShowMissionComplete()
     {
-        documentPanel.SetActive(false);
+        missionCompletePanel.SetActive(true);
+
+        if (missionManager != null)
+        {
+            missionCompleteText.text =
+                "Public Exposure Reconnaissance completed.\n\n" +
+                missionManager.GetScoreSummary();
+        }
+    }
+
+    public void CloseMissionComplete()
+    {
+        missionCompletePanel.SetActive(false);
     }
 }

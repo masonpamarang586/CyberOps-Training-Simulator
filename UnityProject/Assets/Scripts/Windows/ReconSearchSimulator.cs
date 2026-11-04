@@ -26,10 +26,7 @@ public class ReconSearchSimulator
                 "Search Results\n\n" +
 
                 "Northstar Technologies - Employee Handbook\n" +
-                "northstar.test/documents/employee-handbook.pdf\n\n" +
-
-                "Northstar Technologies - Benefits Guide\n" +
-                "northstar.test/documents/benefits.pdf";
+                "northstar.test/documents/employee-handbook.pdf";
         }
 
         if (targetsDomain && targetsPdf)
