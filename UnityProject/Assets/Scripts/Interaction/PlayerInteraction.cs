@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Interaction
@@ -11,7 +9,7 @@ namespace Assets.Scripts.Interaction
         [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private ScenarioMenuController scenarioMenuController;
 
-        private LinuxMonitorInteractable focusedMonitor;
+        private DeskInteractable focusedInteractable;
 
         private void Awake()
         {
@@ -35,16 +33,16 @@ namespace Assets.Scripts.Interaction
                 if (scenarioMenuController != null &&
                     scenarioMenuController.IsMenuOpen)
                 {
-                    scenarioMenuController.ResumeGame();
+                    scenarioMenuController.HandleEscape();
                     return;
                 }
 
                 // Priority 2:
-                // If we're using the monitor, Escape exits it.
-                if (focusedMonitor != null)
+                // If we're using any monitor, Escape exits it.
+                if (focusedInteractable != null)
                 {
-                    focusedMonitor.ExitFocus();
-                    focusedMonitor = null;
+                    focusedInteractable.ExitFocus();
+                    focusedInteractable = null;
                     return;
                 }
 
@@ -64,8 +62,8 @@ namespace Assets.Scripts.Interaction
                 return;
             }
 
-            // While using the monitor, don't process E interactions.
-            if (focusedMonitor != null)
+            // While using a monitor, don't process E interactions.
+            if (focusedInteractable != null)
             {
                 return;
             }
@@ -80,7 +78,7 @@ namespace Assets.Scripts.Interaction
         {
             if (scenarioMenuController != null)
             {
-                scenarioMenuController.MenuClosed += RestoreMonitorFocus;
+                scenarioMenuController.MenuClosed += RestoreInteractableFocus;
             }
         }
 
@@ -88,15 +86,15 @@ namespace Assets.Scripts.Interaction
         {
             if (scenarioMenuController != null)
             {
-                scenarioMenuController.MenuClosed -= RestoreMonitorFocus;
+                scenarioMenuController.MenuClosed -= RestoreInteractableFocus;
             }
         }
 
-        private void RestoreMonitorFocus()
+        private void RestoreInteractableFocus()
         {
-            if (focusedMonitor != null)
+            if (focusedInteractable != null)
             {
-                focusedMonitor.EnterFocus();
+                focusedInteractable.EnterFocus();
             }
         }
 
@@ -108,13 +106,13 @@ namespace Assets.Scripts.Interaction
 
             if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
             {
-                LinuxMonitorInteractable monitor =
-                    hit.collider.GetComponentInParent<LinuxMonitorInteractable>();
+                DeskInteractable interactable =
+                    hit.collider.GetComponentInParent<DeskInteractable>();
 
-                if (monitor != null)
+                if (interactable != null)
                 {
-                    focusedMonitor = monitor;
-                    focusedMonitor.EnterFocus();
+                    focusedInteractable = interactable;
+                    focusedInteractable.EnterFocus();
                 }
             }
         }

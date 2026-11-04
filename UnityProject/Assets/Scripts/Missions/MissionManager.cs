@@ -15,7 +15,7 @@ public class MissionManager : MonoBehaviour
     private bool missionComplete;
 
     public bool IsMissionComplete => missionComplete;
-
+    public event Action OnObjectiveCompleted;
     public event Action OnMissionCompleted;
 
     public void EvaluateObjectives(
@@ -37,6 +37,8 @@ public class MissionManager : MonoBehaviour
                 terminalController.AppendSystemMessage(
                     $"[OBJECTIVE COMPLETE] {objective.description}"
                 );
+
+                OnObjectiveCompleted?.Invoke();
             }
         }
 
@@ -72,15 +74,11 @@ public class MissionManager : MonoBehaviour
         return builder.ToString().TrimEnd();
     }
 
-    public void RequestHint(TerminalController terminalController)
+    public string RequestHint()
     {
         if (missionComplete)
         {
-            terminalController.AppendSystemMessage(
-                "[HINT] Mission already complete."
-            );
-
-            return;
+            return "[HINT] Mission already complete.";
         }
 
         MissionObjective activeObjective = null;
@@ -96,41 +94,45 @@ public class MissionManager : MonoBehaviour
 
         if (activeObjective == null)
         {
-            terminalController.AppendSystemMessage(
-                "[HINT] No active objective."
-            );
-
-            return;
+            return "[HINT] No active objective.";
         }
 
-        string hint = activeObjective.GetNextHint(out int tier);
+        string hint =
+            activeObjective.GetNextHint(out int tier);
 
         if (hint == null)
         {
-            terminalController.AppendSystemMessage(
-                "[HINT] No additional hints available for this objective."
-            );
-
-            return;
+            return
+                "[HINT] No additional hints available for this objective.";
         }
 
         int penalty = 0;
 
         if (scoreManager != null)
         {
-            penalty = scoreManager.ApplyHintPenalty(tier);
+            penalty =
+                scoreManager.ApplyHintPenalty(tier);
         }
 
-        terminalController.AppendSystemMessage(
-            $"[HINT {tier}/3] {hint}"
-        );
+        string message =
+            $"[HINT {tier}/3] {hint}";
 
         if (scoreManager != null)
         {
-            terminalController.AppendSystemMessage(
-                $"[HINT PENALTY] -{penalty} | Score: {scoreManager.CurrentScore}"
-            );
+            message +=
+                $"\n[HINT PENALTY] -{penalty}" +
+                $" | Score: {scoreManager.CurrentScore}";
         }
+
+        return message;
+    }
+
+    public void RequestHint(
+    TerminalController terminalController)
+    {
+        terminalController.AppendSystemMessage(
+            RequestHint()
+        );
     }
 
     public string GetScoreSummary()
@@ -141,6 +143,31 @@ public class MissionManager : MonoBehaviour
         }
 
         return scoreManager.GetScoreSummary();
+    }
+
+    public string GetMissionName()
+    {
+        return missionName;
+    }
+
+    public string GetObjectiveChecklist()
+    {
+        StringBuilder builder =
+            new StringBuilder();
+
+        foreach (MissionObjective objective in objectives)
+        {
+            string marker =
+                objective.isComplete
+                    ? "[X]"
+                    : "[ ]";
+
+            builder.AppendLine(
+                $"{marker} {objective.description}"
+            );
+        }
+
+        return builder.ToString().TrimEnd();
     }
     private bool AllObjectivesComplete()
     {
@@ -160,22 +187,66 @@ public class MissionManager : MonoBehaviour
         return true;
     }
 
-    private void CompleteMission(
-        TerminalController terminalController)
+    private void CompleteMission(TerminalController terminalController = null)
     {
         missionComplete = true;
 
-        terminalController.AppendSystemMessage(
-            $"*** MISSION COMPLETE: {missionName} ***"
-        );
-
-        if (scoreManager != null)
+        if (terminalController != null)
         {
             terminalController.AppendSystemMessage(
-                scoreManager.GetScoreSummary()
+                $"*** MISSION COMPLETE: {missionName} ***"
             );
+
+            if (scoreManager != null)
+            {
+                terminalController.AppendSystemMessage(
+                    scoreManager.GetScoreSummary()
+                );
+            }
         }
 
         OnMissionCompleted?.Invoke();
+    }
+
+    public bool CompleteExternalObjective(string target)
+    {
+        if (missionComplete)
+        {
+            return false;
+        }
+
+        foreach (MissionObjective objective in objectives)
+        {
+            if (objective.type != MissionObjectiveType.ExternalEvent)
+            {
+                continue;
+            }
+
+            if (objective.isComplete)
+            {
+                continue;
+            }
+
+            if (!string.Equals(
+                objective.target,
+                target,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            objective.isComplete = true;
+
+            OnObjectiveCompleted?.Invoke();
+
+            if (AllObjectivesComplete())
+            {
+                CompleteMission();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

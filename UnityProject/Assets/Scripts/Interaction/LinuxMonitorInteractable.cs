@@ -1,18 +1,16 @@
 using UnityEngine;
 
-public class LinuxMonitorInteractable : MonoBehaviour
+public class LinuxMonitorInteractable : MonitorInteractable
 {
     [SerializeField] private GameObject terminalPanel;
     [SerializeField] private TerminalController terminalController;
-
-    public bool IsFocused { get; private set; }
 
     private void Start()
     {
         terminalPanel.SetActive(false);
     }
 
-    public void EnterFocus()
+    public override void EnterFocus()
     {
         IsFocused = true;
 
@@ -20,7 +18,7 @@ public class LinuxMonitorInteractable : MonoBehaviour
         terminalController.FocusInput();
     }
 
-    public void ExitFocus()
+    public override void ExitFocus()
     {
         IsFocused = false;
 
