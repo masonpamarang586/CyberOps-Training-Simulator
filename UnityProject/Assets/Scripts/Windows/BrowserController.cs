@@ -6,6 +6,9 @@ public class BrowserController : MonoBehaviour
     [SerializeField] private TMP_InputField searchInput;
     [SerializeField] private TMP_Text resultsText;
     [SerializeField] private GameObject helpPanel;
+    [SerializeField] private GameObject exposedDocumentButton;
+    [SerializeField] private GameObject documentPanel;
+    [SerializeField] private MissionManager missionManager;
 
     private ReconSearchSimulator searchSimulator;
 
@@ -24,6 +27,8 @@ public class BrowserController : MonoBehaviour
             HandleSearch
         );
         helpPanel.SetActive(false);
+        exposedDocumentButton.SetActive(false);
+        documentPanel.SetActive(false);
     }
 
     public void Search()
@@ -33,8 +38,43 @@ public class BrowserController : MonoBehaviour
 
     private void HandleSearch(string query)
     {
+        string command =
+            query.Trim().ToLowerInvariant();
+
+        if (command == "hint")
+        {
+            resultsText.text =
+                missionManager != null
+                    ? missionManager.RequestHint()
+                    : "Hint system unavailable.";
+
+            searchInput.text = "";
+            searchInput.ActivateInputField();
+            searchInput.Select();
+
+            return;
+        }
+
+        if (command == "score")
+        {
+            resultsText.text =
+                missionManager != null
+                    ? missionManager.GetScoreSummary()
+                    : "Score system unavailable.";
+
+            searchInput.text = "";
+            searchInput.ActivateInputField();
+            searchInput.Select();
+
+            return;
+        }
+
         resultsText.text =
             searchSimulator.Search(query);
+
+        exposedDocumentButton.SetActive(
+            searchSimulator.RevealsExposedDocument(query)
+        );
 
         searchInput.ActivateInputField();
         searchInput.Select();
@@ -52,5 +92,22 @@ public class BrowserController : MonoBehaviour
         searchInput.onSubmit.RemoveListener(
             HandleSearch
         );
+    }
+
+    public void OpenExposedDocument()
+    {
+        documentPanel.SetActive(true);
+
+        if (missionManager != null)
+        {
+            missionManager.CompleteExternalObjective(
+                "exposed_network_document"
+            );
+        }
+    }
+
+    public void CloseDocument()
+    {
+        documentPanel.SetActive(false);
     }
 }

@@ -20,19 +20,13 @@ public class ReconSearchSimulator
             normalized.Contains("\"confidential\"") ||
             normalized.Contains("confidential");
 
-        if (targetsDomain &&
-            targetsPdf &&
-            targetsConfidential)
+        if (RevealsExposedDocument(query))
         {
             return
                 "Search Results\n\n" +
 
                 "Northstar Technologies - Employee Handbook\n" +
                 "northstar.test/documents/employee-handbook.pdf\n\n" +
-
-                "CONFIDENTIAL - Network Infrastructure Overview\n" +
-                "northstar.test/internal/network-infrastructure.pdf\n" +
-                "Publicly indexed document containing internal infrastructure information.\n\n" +
 
                 "Northstar Technologies - Benefits Guide\n" +
                 "northstar.test/documents/benefits.pdf";
@@ -78,5 +72,21 @@ public class ReconSearchSimulator
             "Thousands of results found.\n\n" +
 
             "Your search is too broad to identify useful information efficiently.";
+    }
+
+    public bool RevealsExposedDocument(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return false;
+        }
+
+        string normalized =
+            query.Trim().ToLowerInvariant();
+
+        return
+            normalized.Contains("site:northstar.test") &&
+            normalized.Contains("filetype:pdf") &&
+            normalized.Contains("confidential");
     }
 }

@@ -6,7 +6,8 @@ public enum MissionObjectiveType
     ReachPath,
     ReadFile,
     RecoverPassword,
-    BecomeRoot
+    BecomeRoot,
+    ExternalEvent
 }
 
 [Serializable]
