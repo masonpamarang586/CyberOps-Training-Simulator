@@ -74,6 +74,11 @@ public class MissionManager : MonoBehaviour
         return builder.ToString().TrimEnd();
     }
 
+    public string GetBriefing()
+    {
+        return briefing;
+    }
+
     public string RequestHint()
     {
         if (missionComplete)

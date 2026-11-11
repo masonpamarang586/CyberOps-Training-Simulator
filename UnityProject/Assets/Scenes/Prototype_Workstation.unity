@@ -119,6 +119,72 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &75831264
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.14565
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.33483
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029723507758871123, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7385427907327700594, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: m_Name
+      value: PhoneSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773711089335016130, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+      propertyPath: missionManager
+      value: 
+      objectReference: {fileID: 537157009}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83f45fca1dc6c46468d3837bc4e7eda7, type: 3}
+--- !u!1 &109760736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8987971232483049075, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &238155389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1406,12 +1472,27 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 722760904578745187, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
   m_PrefabInstance: {fileID: 6916760819575306525}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 109760736}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88e6d461b53ca78438f5f14678df0ebb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioMenuController
+--- !u!114 &1212417639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109760736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6efddc0a7dc9b1b40beafb5b282724d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScenarioObjectivesController
+  missionManager: {fileID: 537157009}
+  missionTitleText: {fileID: 2037224062}
+  objectivesText: {fileID: 1747540989}
 --- !u!1 &1422472410
 GameObject:
   m_ObjectHideFlags: 0
@@ -1694,6 +1775,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692022230}
   m_CullTransparentMesh: 1
+--- !u!114 &1747540989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2577340700873486134, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1765687782
 GameObject:
   m_ObjectHideFlags: 0
@@ -2005,6 +2097,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2026763045}
   m_CullTransparentMesh: 1
+--- !u!114 &2037224062 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4883579769849611607, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+  m_PrefabInstance: {fileID: 6916760819575306525}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &2041098717
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,7 +2281,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1210898232}
   m_HandleRect: {fileID: 1210898231}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2326,6 +2429,34 @@ PrefabInstance:
       propertyPath: m_ReferenceResolution.y
       value: 1440
       objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1212417637}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowObjectives
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ScenarioMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6602272608366959316, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8037746908552460180, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
       propertyPath: m_SizeDelta.x
       value: 220
@@ -2341,7 +2472,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8987971232483049075, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1212417639}
   m_SourcePrefab: {fileID: 100100000, guid: 249151f54e2a9024a8325cf2c4946a7f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -2351,6 +2485,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 840582920}
+  - {fileID: 75831264}
   - {fileID: 1906922496}
   - {fileID: 1095977278}
   - {fileID: 238155391}
