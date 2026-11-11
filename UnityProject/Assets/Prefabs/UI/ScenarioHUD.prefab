@@ -1849,8 +1849,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioMenuController
   pausePanel: {fileID: 7064221074610183649}
-  pauseMenuContent: {fileID: 0}
-  objectivesPanel: {fileID: 0}
+  pauseMenuContent: {fileID: 6829012350381909206}
+  objectivesPanel: {fileID: 6898208812127170193}
 --- !u!1 &8993637064096632176
 GameObject:
   m_ObjectHideFlags: 0
