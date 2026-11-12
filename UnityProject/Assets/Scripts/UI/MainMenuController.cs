@@ -44,6 +44,13 @@ public class MainMenuController : MonoBehaviour
         );
     }
 
+    public void LoadExposedServiceAccountScenario()
+    {
+        SceneManager.LoadScene(
+            "Scenario_ExposedServiceAccount"
+        );
+    }
+
     public void QuitGame()
     {
         Application.Quit();

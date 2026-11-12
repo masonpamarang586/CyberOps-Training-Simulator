@@ -147,7 +147,7 @@ public class VirtualFileSystem
 
         // /var/log
         SimDirectory log = new SimDirectory(
-            "log", 
+            "log",
             var,
             "root",
             PermissionLevel.Public
@@ -159,7 +159,11 @@ public class VirtualFileSystem
                 "auth.log",
                 "Sep 23 13:58 sshd: Failed password for user from 203.0.113.42 port 51820 ssh2\n" +
                 "Sep 23 14:01 sshd: Failed password for user from 203.0.113.42 port 51821 ssh2\n" +
-                "Sep 23 14:03 sshd: Accepted password for user from 203.0.113.42 port 51822 ssh2"
+                "Sep 23 14:03 sshd: Accepted password for user from 203.0.113.42 port 51822 ssh2\n" +
+                "Nov 11 07:41 sshd: Failed password for svc_backup from 198.51.100.77 port 50112 ssh2\n" +
+                "Nov 11 07:42 sshd: Failed password for svc_backup from 198.51.100.77 port 50122 ssh2\n" +
+                "Nov 11 07:43 sshd: Accepted password for svc_backup from 198.51.100.77 port 50144 ssh2\n" +
+                "Nov 11 07:43 sshd: session opened for user svc_backup"
             )
         );
 

@@ -11,13 +11,16 @@ public class BrowserController : MonoBehaviour
     [SerializeField] private MissionManager missionManager;
     [SerializeField] private GameObject missionCompletePanel;
     [SerializeField] private TMP_Text missionCompleteText;
-
+    [SerializeField] private string documentObjectiveTarget = "exposed_network_document";
+    [SerializeField]
+    private ReconSearchProfile searchProfile =
+    ReconSearchProfile.PublicExposure;
     private ReconSearchSimulator searchSimulator;
 
     private void Awake()
     {
         searchSimulator =
-            new ReconSearchSimulator();
+            new ReconSearchSimulator(searchProfile);
     }
 
     private void Start()
@@ -120,19 +123,24 @@ public class BrowserController : MonoBehaviour
         if (missionManager != null)
         {
             missionManager.CompleteExternalObjective(
-                "exposed_network_document"
+                documentObjectiveTarget
             );
         }
     }
 
     private void ShowMissionComplete()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         missionCompletePanel.SetActive(true);
 
         if (missionManager != null)
         {
             missionCompleteText.text =
-                "Public Exposure Reconnaissance completed.\n\n" +
+                missionManager.GetMissionName() +
+                " completed.\n\n" +
                 missionManager.GetScoreSummary();
         }
     }

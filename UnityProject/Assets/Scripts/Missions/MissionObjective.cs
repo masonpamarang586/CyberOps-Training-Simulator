@@ -7,7 +7,8 @@ public enum MissionObjectiveType
     ReadFile,
     RecoverPassword,
     BecomeRoot,
-    ExternalEvent
+    ExternalEvent,
+    SearchFile
 }
 
 [Serializable]
@@ -16,6 +17,7 @@ public class MissionObjective
     public string description;
     public MissionObjectiveType type;
     public string target;
+    public string secondaryTarget;
     [Header("Hints")]
 
     [TextArea(2, 4)]
@@ -60,6 +62,13 @@ public class MissionObjective
             case MissionObjectiveType.RecoverPassword:
                 completed =
                     commandProcessor.HasRecoveredPassword(target);
+                break;
+            case MissionObjectiveType.SearchFile:
+                completed =
+                    commandProcessor.HasSearchedFile(
+                        target,
+                        secondaryTarget
+                    );
                 break;
         }
 

@@ -4,6 +4,8 @@ public class CommandProcessor
 {
     private readonly VirtualFileSystem fileSystem;
     private readonly PasswordAttackSimulator passwordAttackSimulator;
+    private string lastSearchTerm;
+    private string lastSearchPath;
 
     public CommandProcessor()
     {
@@ -44,6 +46,8 @@ public class CommandProcessor
                 return Sudo(parts);
             case "crack":
                 return Crack(parts);
+            case "grep":
+                return Grep(parts);
             default:
                 return $"bash: {command}: command not found";
         }
@@ -60,6 +64,7 @@ public class CommandProcessor
             "cat     Display file contents\n" +
             "whoami  Display current user\n" +
             "sudo    Execute or inspect elevated permissions\n" +
+            "grep    Search a file for matching text\n" +
             "crack   Run simulated password dictionary attack";
 
     }
@@ -189,6 +194,52 @@ public class CommandProcessor
         );
     }
 
+    private string Grep(string[] parts)
+    {
+        if (parts.Length < 3)
+        {
+            return "Usage: grep <term> <file>";
+        }
+
+        string searchTerm = parts[1];
+        string filePath = parts[2];
+
+        string content =
+            fileSystem.ReadFile(filePath);
+
+        if (content.StartsWith("cat:"))
+        {
+            return
+                $"grep: unable to read '{filePath}'";
+        }
+
+        string[] lines =
+            content.Split('\n');
+
+        System.Text.StringBuilder matches =
+            new System.Text.StringBuilder();
+
+        foreach (string line in lines)
+        {
+            if (line.Contains(
+                searchTerm,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                matches.AppendLine(line);
+            }
+        }
+
+        lastSearchTerm = searchTerm;
+        lastSearchPath = filePath;
+
+        if (matches.Length == 0)
+        {
+            return "";
+        }
+
+        return matches.ToString().TrimEnd();
+    }
+
     public string GetCurrentPath()
     {
         return fileSystem.GetCurrentPath();
@@ -206,5 +257,18 @@ public class CommandProcessor
     public bool HasRecoveredPassword(string username)
     {
         return passwordAttackSimulator.HasRecoveredPassword(username);
+    }
+
+    public bool HasSearchedFile(string searchTerm, string filePath)
+    {
+        return
+            string.Equals(
+                lastSearchTerm,
+                searchTerm,
+                StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(
+                lastSearchPath,
+                filePath,
+                StringComparison.OrdinalIgnoreCase);
     }
 }
