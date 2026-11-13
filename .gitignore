@@ -1,0 +1,80 @@
+# =========================
+# Unity generated folders
+# =========================
+
+/UnityProject/[Ll]ibrary/
+/UnityProject/[Tt]emp/
+/UnityProject/[Oo]bj/
+/UnityProject/[Ll]ogs/
+/UnityProject/[Uu]ser[Ss]ettings/
+/UnityProject/[Mm]emoryCaptures/
+/UnityProject/[Rr]ecordings/
+
+# Unity build output
+/UnityProject/[Bb]uild/
+/UnityProject/[Bb]uilds/
+
+# =========================
+# Unity / IDE generated files
+# =========================
+
+/UnityProject/.vs/
+/UnityProject/.idea/
+/UnityProject/.vscode/
+
+/UnityProject/*.csproj
+/UnityProject/*.sln
+/UnityProject/*.slnx
+/UnityProject/*.user
+/UnityProject/*.userprefs
+/UnityProject/*.pidb
+/UnityProject/*.booproj
+/UnityProject/*.svd
+/UnityProject/*.pdb
+/UnityProject/*.mdb
+/UnityProject/*.opendb
+/UnityProject/*.VC.db
+
+# =========================
+# Unity crash/debug files
+# =========================
+
+/UnityProject/sysinfo.txt
+/UnityProject/crashlytics-build.properties
+
+# =========================
+# Blender backups/temp files
+# =========================
+
+*.blend1
+*.blend2
+*.blend@
+*.blend~
+
+# Keep actual Blender projects
+# *.blend is intentionally NOT ignored
+
+# =========================
+# Windows / OS junk
+# =========================
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS junk, just in case
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# =========================
+# Misc editor/temp files
+# =========================
+
+*.tmp
+*.temp
+*.bak
+*~
