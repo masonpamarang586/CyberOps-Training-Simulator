@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/PublicExposureRecon.unity
     guid: 2602e6326c975164b9830215e35983d7
   - enabled: 1
-    path: Assets/Scenes/Scenario_exposedServiceAccount.unity
+    path: Assets/Scenes/Scenario_ExposedServiceAccount.unity
     guid: 1a12c84693036cd42881cc568edce5a6
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}

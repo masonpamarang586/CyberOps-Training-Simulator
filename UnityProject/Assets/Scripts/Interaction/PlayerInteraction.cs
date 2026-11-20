@@ -9,6 +9,7 @@ namespace Assets.Scripts.Interaction
         [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private ScenarioMenuController scenarioMenuController;
         [SerializeField] private InteractionPromptController interactionPromptController;
+        [SerializeField] private InteractionAudioFeedback interactionAudioFeedback;
 
         private DeskInteractable hoveredInteractable;
 
@@ -44,8 +45,11 @@ namespace Assets.Scripts.Interaction
                 // If we're using any monitor, Escape exits it.
                 if (focusedInteractable != null)
                 {
+                    interactionAudioFeedback?.PlayExit();
+
                     focusedInteractable.ExitFocus();
                     focusedInteractable = null;
+
                     return;
                 }
 
@@ -75,10 +79,16 @@ namespace Assets.Scripts.Interaction
 
             UpdateHoveredInteractable();
 
-            if (Keyboard.current.eKey.wasPressedThisFrame && hoveredInteractable != null)
+            if (Keyboard.current.eKey.wasPressedThisFrame &&
+                hoveredInteractable != null)
             {
-                focusedInteractable = hoveredInteractable;
+                focusedInteractable =
+                    hoveredInteractable;
+
                 ClearHover();
+
+                interactionAudioFeedback?.PlayEnter();
+
                 focusedInteractable.EnterFocus();
             }
         }
