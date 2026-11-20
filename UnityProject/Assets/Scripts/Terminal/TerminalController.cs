@@ -16,14 +16,12 @@ public class TerminalController : MonoBehaviour
     {
         commandProcessor = new CommandProcessor();
 
-        string startupText = "CyberOps Linux Simulator";
-
-        if (missionManager != null)
-        {
-            startupText +=
-                "\n\n" +
-                missionManager.GetMissionBriefing();
-        }
+        string startupText =
+            "<color=#37D7FF><b>CYBEROPS LINUX CONSOLE</b></color>\n" +
+            "<color=#8EA3B7>Secure training environment</color>\n\n" +
+            "Type 'help' for available commands.\n" +
+            "Type 'hint' for mission assistance.\n" +
+            "Type 'score' to view your score.";
 
         terminalOutput.text =
             startupText +

@@ -26,6 +26,7 @@ public class BrowserController : MonoBehaviour
     private void Start()
     {
         resultsText.text =
+            "<color=#8EA3B7>CYBERSEARCH READY</color>\n\n" +
             "Enter a search query to begin reconnaissance.";
 
         searchInput.onSubmit.AddListener(
@@ -139,8 +140,10 @@ public class BrowserController : MonoBehaviour
         if (missionManager != null)
         {
             missionCompleteText.text =
+                "<b>" +
                 missionManager.GetMissionName() +
-                " completed.\n\n" +
+                "</b>\n\n" +
+                "<color=#8EA3B7>TRAINING OPERATION COMPLETE</color>\n\n" +
                 missionManager.GetScoreSummary();
         }
     }
