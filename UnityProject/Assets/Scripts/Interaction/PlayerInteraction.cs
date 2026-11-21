@@ -8,6 +8,10 @@ namespace Assets.Scripts.Interaction
         [SerializeField] private Camera playerCamera;
         [SerializeField] private float interactionDistance = 3f;
         [SerializeField] private ScenarioMenuController scenarioMenuController;
+        [SerializeField] private InteractionPromptController interactionPromptController;
+        [SerializeField] private InteractionAudioFeedback interactionAudioFeedback;
+
+        private DeskInteractable hoveredInteractable;
 
         private DeskInteractable focusedInteractable;
 
@@ -41,8 +45,11 @@ namespace Assets.Scripts.Interaction
                 // If we're using any monitor, Escape exits it.
                 if (focusedInteractable != null)
                 {
+                    interactionAudioFeedback?.PlayExit();
+
                     focusedInteractable.ExitFocus();
                     focusedInteractable = null;
+
                     return;
                 }
 
@@ -59,18 +66,30 @@ namespace Assets.Scripts.Interaction
             if (scenarioMenuController != null &&
                 scenarioMenuController.IsMenuOpen)
             {
+                ClearHover();
                 return;
             }
 
             // While using a monitor, don't process E interactions.
             if (focusedInteractable != null)
             {
+                ClearHover();
                 return;
             }
 
-            if (Keyboard.current.eKey.wasPressedThisFrame)
+            UpdateHoveredInteractable();
+
+            if (Keyboard.current.eKey.wasPressedThisFrame &&
+                hoveredInteractable != null)
             {
-                TryInteract();
+                focusedInteractable =
+                    hoveredInteractable;
+
+                ClearHover();
+
+                interactionAudioFeedback?.PlayEnter();
+
+                focusedInteractable.EnterFocus();
             }
         }
 
@@ -97,24 +116,55 @@ namespace Assets.Scripts.Interaction
                 focusedInteractable.EnterFocus();
             }
         }
-
-        private void TryInteract()
+        private void UpdateHoveredInteractable()
         {
-            Ray ray = playerCamera.ScreenPointToRay(
-                Mouse.current.position.ReadValue()
-            );
-
-            if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
+            if (Mouse.current == null)
             {
-                DeskInteractable interactable =
-                    hit.collider.GetComponentInParent<DeskInteractable>();
-
-                if (interactable != null)
-                {
-                    focusedInteractable = interactable;
-                    focusedInteractable.EnterFocus();
-                }
+                ClearHover();
+                return;
             }
+
+            Ray ray =
+                playerCamera.ScreenPointToRay(
+                    Mouse.current.position.ReadValue()
+                );
+
+            DeskInteractable newHovered = null;
+
+            if (Physics.Raycast(
+                ray,
+                out RaycastHit hit,
+                interactionDistance))
+            {
+                newHovered =
+                    hit.collider
+                        .GetComponentInParent<DeskInteractable>();
+            }
+
+            if (newHovered == hoveredInteractable)
+            {
+                return;
+            }
+
+            hoveredInteractable = newHovered;
+
+            if (hoveredInteractable != null)
+            {
+                interactionPromptController?.ShowPrompt(
+                    hoveredInteractable.InteractionLabel
+                );
+            }
+            else
+            {
+                interactionPromptController?.HidePrompt();
+            }
+        }
+
+        private void ClearHover()
+        {
+            hoveredInteractable = null;
+
+            interactionPromptController?.HidePrompt();
         }
     }
 }
