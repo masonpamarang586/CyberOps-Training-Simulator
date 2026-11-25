@@ -1,10 +1,20 @@
-# CyberOps — Ethical Hacking Training Simulator
+# CyberOps Training Simulator
 
 **A scenario-based cybersecurity training game built in Unity 6.**
 
 CyberOps is a California State University Channel Islands Computer Science Capstone project that blends a first-person 3D workstation with simulated security investigations. Players interact with a Linux-style terminal and a fictional Windows-style reconnaissance browser to analyze evidence, solve objectives, and complete missions in a controlled environment.
 
-> **Project status:** Playable Capstone prototype (Fall 2026) · **Target:** Windows desktop · **Engine:** Unity 6 / C#
+> **Project status:** v1.0.0 released (Fall 2026) · **Target:** Windows x64 · **Engine:** Unity 6 / C#
+
+## Download and play
+
+**Latest release: [CyberOps Training Simulator v1.0.0 — Windows x64](https://github.com/masonpamarang586/CyberOps-Training-Simulator/releases/latest)**
+
+1. Download the Windows ZIP archive from the release page.
+2. Extract the entire archive to a folder on your computer.
+3. Launch `CyberOps Training Simulator.exe`.
+
+No Unity installation is required to play. Keep the executable and accompanying game files together.
 
 ## Why CyberOps?
 
@@ -28,7 +38,7 @@ The virtual systems, accounts, documents, credentials, and search results are fi
 - **Simulated reconnaissance browser:** Search fictional indexed content and investigate exposed documents.
 - **Mission framework:** Receive briefings, track objectives, and complete scenario-specific investigation steps.
 - **Progressive hints and scoring:** Request up to three tiers of hints per objective; hints reduce the mission score. Completed missions display performance feedback.
-- **Player interface:** Main menu, scenario selection, phone-based mission briefings, objective display, pause/resume, restart, and return-to-menu controls.
+- **Player interface:** Main menu, scenario selection, phone-based mission briefings, objective display, pause/resume, restart, and return-to-menu controls, with a custom CyberOps application icon and cursor.
 
 ### Basic controls
 
@@ -62,7 +72,7 @@ Each scenario introduces a problem, lets the player gather evidence through the 
 2. Clone the repository:
 
    ```bash
-   git clone https://github.com/masonpamarang586/Capstone.git
+   git clone https://github.com/masonpamarang586/CyberOps-Training-Simulator.git
    ```
 
 3. In Unity Hub, choose **Add project from disk** and select the `UnityProject/` folder.
@@ -70,12 +80,12 @@ Each scenario introduces a problem, lets the player gather evidence through the 
 5. Open `Assets/MainMenu.unity` and press **Play**.
 6. Choose a scenario from the in-game menu.
 
-**Windows standalone build:** The project includes configured scenes under Unity's Build Profiles / build settings. Select the Windows desktop target and build from Unity to create a playable executable. Generated build folders are intentionally excluded from version control; a downloadable executable has **not** been published as a GitHub Release.
+**Windows standalone build:** The project includes configured scenes under Unity's Build Profiles / build settings. Select the Windows desktop target and build from Unity to create a playable executable. Generated build folders are intentionally excluded from version control. A tested Windows standalone build is available through [GitHub Releases](https://github.com/masonpamarang586/CyberOps-Training-Simulator/releases/latest).
 
 ## Repository organization
 
 ```text
-Capstone/
+CyberOps-Training-Simulator/
 ├── Blender/                    # Workstation and room source models
 ├── UnityProject/
 │   ├── Assets/
