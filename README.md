@@ -1,4 +1,4 @@
-# CyberOps Training Simulator
+# CyberOps - Ethical Hacking Training Simulator
 
 **A scenario-based cybersecurity training game built in Unity 6.**
 
